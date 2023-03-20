@@ -1,7 +1,6 @@
 #ifndef Debry_Vector2T_H
 #define Debry_Vector2T_H
 
-#include "iostream"
 #include "math.h"
 
 namespace debry {
