@@ -1,5 +1,5 @@
-#ifndef Debry_Vector2T_H
-#define Debry_Vector2T_H
+#ifndef DEBRY_VECTOR2T_H
+#define DEBRY_VECTOR2T_H
 
 #include "math.h"
 
@@ -20,7 +20,7 @@ namespace debry {
 
 		ctype getX() const { return this->x; }
 		ctype getY() const { return this->y; }
-		
+
 		Vector2* setX(const ctype x) { this->x = x; return this; }
 		Vector2* setY(const ctype y) { this->y = y; return this; }
 
@@ -34,7 +34,7 @@ namespace debry {
 			this->x += other.x;
 			this->y += other.y;
 		}
-		
+
 		Vector2 operator-(const Vector2& other) const {
 			return Vector2{ this->x - other.x,this->y - other.y };
 		}
@@ -60,11 +60,11 @@ namespace debry {
 		ctype Magnitude() const {
 			return ctype{ (x * x) + (y * y) };
 		}
-		
+
 		ctype MagnitudeSqrt() const {
 			return ctype{ sqrtf(Magnitude()) };
 		}
-		
+
 		void Normalize() {
 			ctype norm = MagnitudeSqrt();
 			if (norm > 0) {

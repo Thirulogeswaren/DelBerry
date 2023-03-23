@@ -1,7 +1,7 @@
 #ifndef DEBRY_MATH_H
 #define DEBRY_MATH_H
 
-#include "Vector2.h"
+#include "vector2.h"
 
 namespace debry {
 	constexpr float PI{ 3.1415927f };

@@ -7,7 +7,7 @@
 
 #ifdef DEBRY_ENABLE_LOG
 #include "iostream"
-#define DEBRY_LOG(build_in_type) std::cout << build_in_type << "\n"
+#define DEBRY_LOG(build_in_type) std::cout << "LOG: " << build_in_type << "\n"
 #else
 #define DEBRY_LOG(build_in_type) 
 #endif
