@@ -1,11 +1,12 @@
-#ifndef DEBRY_POINT_MASSES_H
-#define DEBRY_POINT_MASSES_H
+#ifndef DEBRY_POINT_MASS_H
+#define DEBRY_POINT_MASS_H
 
 #include "vector2.h"
 
 namespace debry {
 	/* point mass */
 	class Particle {
+	private:
 		Vector2f position;
 		Vector2f velocity;
 		Vector2f acceleration;
@@ -14,9 +15,9 @@ namespace debry {
 		float mass;
 		float invmass;
 		float damping;
+		Vector2f res_acceleration;
 	public:
 		Particle();
-		~Particle();
 
 		void Integrate(float dt);
 
@@ -25,37 +26,25 @@ namespace debry {
 
 		float GetPositionX() const { return position.getX(); }
 		float GetPositionY() const { return position.getY(); }
+		Vector2f PositionVector() const { return position; }
 
 		float GetVelocityX() const { return velocity.getX(); }
 		float GetVelocityY() const { return velocity.getY(); }
+		Vector2f VelocityVector() const { return velocity; }
 
 		float GetAccelerationX() const { return acceleration.getX(); }
 		float GetAccelerationY() const { return acceleration.getY(); }
+		Vector2f AccelerationVector() const { return acceleration; }
 
-		void AddForce(const Vector2f& force) {
-			this->ForceAccum += force;
-		}
-		void ClearForces() {
-			ForceAccum.Clear();
-		}
+		Particle* SetPosition(const Vector2f& position_);
+		Particle* SetVelocity(const Vector2f& velocity_);
+		Particle* SetAcceleration(const Vector2f& acceleration_);
 
-		Particle* SetMass(const float& mass) {
-			this->mass = { mass };
-			if (mass > 0.0f) {
-				this->invmass = { 1.0f / mass };
-			}
-			return this;
-		}
+		Particle* SetMass(const float& mass_);
+		Particle* SetDrag(const float& drag);
 
-		Particle* SetDrag(const float& drag) {
-			damping = drag;
-			return this;
-		}
-
-		Particle* SetAcceleration(const Vector2f& acc) {
-			this->acceleration = { acc };
-			return this;
-		}
+		void AddForce(const Vector2f& force);
+		void ClearForces();
 	};
 }
 

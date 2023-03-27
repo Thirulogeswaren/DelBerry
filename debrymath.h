@@ -9,11 +9,21 @@ namespace debry {
 	constexpr float toDegreeF(float radian) { return radian * 180.0f / PI; }
 	constexpr float toRadianF(float degree) { return degree * PI / 180.0f; }
 	
-	template<class ctype>
-	ctype DotProduct(const Vector2<ctype>& w, const Vector2<ctype>& v) {
+	template<typename vectype>
+	inline vectype DotProduct(const Vector2<vectype>& w, const Vector2<vectype>& v) {
 		return { w.getX() * v.getX() + w.getY() * v.getY() };
 	}
+	
+	template<typename vectype = float> 
+	inline float RotateWrtMousePosition(const Vector2<vectype>& mouse_position, const Vector2<vectype>& object_position) {
+		static Vector2<vectype> tmp{ 0.0f };
+		tmp = mouse_position - object_position;
+		return toDegreeF(atan2f(tmp.getY(), tmp.getX()));
+	}
 
+	inline Vector2f ShipRotation(float AngleInRadian, float speed) {
+		return { sinf(AngleInRadian) * speed, -(cosf(AngleInRadian) * speed) };
+	}
 
 }
 

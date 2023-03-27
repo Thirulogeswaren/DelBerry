@@ -16,15 +16,20 @@ namespace debry {
 		ctype y;
 	public:
 		Vector2(ctype x, ctype y) : x{ x }, y{ y } { }
-		Vector2(ctype s) : Vector2{ s,s } { }
+		explicit Vector2(ctype s) : Vector2{ s,s } { }
 
 		ctype getX() const { return this->x; }
 		ctype getY() const { return this->y; }
+		Vector2 getVector() const {
+			return { this->x, this->y };
+		}
 
 		Vector2* setX(const ctype x) { this->x = x; return this; }
 		Vector2* setY(const ctype y) { this->y = y; return this; }
-
-		Vector2 getVector() const { return Vector2{ x,y }; }
+		void setVector(const Vector2& other) {
+			this->x = { other.x };
+			this->y = { other.y };
+		}
 
 		Vector2 operator+(const Vector2& other) const {
 			return Vector2{ this->x + other.x,this->y + other.y };
