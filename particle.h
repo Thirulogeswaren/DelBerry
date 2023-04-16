@@ -10,41 +10,32 @@ namespace debry {
 		Vector2f position;
 		Vector2f velocity;
 		Vector2f acceleration;
-		Vector2f ForceAccum;
+		Vector2f AccumulatedForce;
 
 		float mass;
 		float invmass;
 		float damping;
-		Vector2f res_acceleration;
+		Vector2f ResultingForce;
 	public:
 		Particle();
 
 		void Integrate(float dt);
 
-		float GetMass() const { return mass; }
-		float GetInvMass() const { return invmass; }
+		[[nodiscard]] Vector2f getPosition() const { return position; }
+		[[nodiscard]] Vector2f getVelocity() const { return velocity; }
+		[[nodiscard]] Vector2f getAcceleration() const { return acceleration; }
 
-		float GetPositionX() const { return position.getX(); }
-		float GetPositionY() const { return position.getY(); }
-		Vector2f PositionVector() const { return position; }
+		[[nodiscard]] float getMass() const { return mass; }
+		[[nodiscard]] float getInvMass() const { return invmass; }
 
-		float GetVelocityX() const { return velocity.getX(); }
-		float GetVelocityY() const { return velocity.getY(); }
-		Vector2f VelocityVector() const { return velocity; }
+		Particle* setPosition(const Vector2f& other) { position = other; return this; }
+		Particle* setAcceleration(const Vector2f& other) { acceleration = other; return this; }
 
-		float GetAccelerationX() const { return acceleration.getX(); }
-		float GetAccelerationY() const { return acceleration.getY(); }
-		Vector2f AccelerationVector() const { return acceleration; }
+		Particle* setMass(const float& weight);
+		Particle* setDrag(const float& drag) { damping = drag; return this; }
 
-		Particle* SetPosition(const Vector2f& position_);
-		Particle* SetVelocity(const Vector2f& velocity_);
-		Particle* SetAcceleration(const Vector2f& acceleration_);
-
-		Particle* SetMass(const float& mass_);
-		Particle* SetDrag(const float& drag);
-
-		void AddForce(const Vector2f& force);
-		void ClearForces();
+		inline void addForce(const Vector2f& force) { AccumulatedForce += force; }
+		inline void clearForces() { AccumulatedForce.Zero(); }
 	};
 }
 

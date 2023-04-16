@@ -3,26 +3,28 @@
 
 #include "vector2.h"
 
-namespace debry {
-	constexpr float PI{ 3.1415927f };
+namespace debry::math {
+	static constexpr float DEBRY_PI{ 3.1415927f };
 
-	constexpr float toDegreeF(float radian) { return radian * 180.0f / PI; }
-	constexpr float toRadianF(float degree) { return degree * PI / 180.0f; }
-	
-	template<typename vectype>
-	inline vectype DotProduct(const Vector2<vectype>& w, const Vector2<vectype>& v) {
-		return { w.getX() * v.getX() + w.getY() * v.getY() };
-	}
-	
-	template<typename vectype = float> 
-	inline float RotateWrtMousePosition(const Vector2<vectype>& mouse_position, const Vector2<vectype>& object_position) {
-		static Vector2<vectype> tmp{ 0.0f };
-		tmp = mouse_position - object_position;
-		return toDegreeF(atan2f(tmp.getY(), tmp.getX()));
+	[[nodiscard]] inline constexpr float toDegreeF(float radian) {
+		return radian * 180.0f / DEBRY_PI;
 	}
 
-	inline Vector2f ShipRotation(float AngleInRadian, float speed) {
-		return { sinf(AngleInRadian) * speed, -(cosf(AngleInRadian) * speed) };
+	[[nodiscard]] inline constexpr float toRadianF(float degree) {
+		return degree * DEBRY_PI / 180.0f;
+	}
+	
+	[[nodiscard]] inline float DotProductF(const Vector2f& w, const Vector2f& v) {
+		return { w.x * v.x + w.y * v.y };
+	}
+	
+	[[nodiscard]] inline float RotateWrtMousePosition(const Vector2f& MousePosition, const Vector2f& PlayerPosition) {
+		const auto& [x, y] = MousePosition - PlayerPosition;
+		return toDegreeF(std::atan2(y, x));
+	}
+
+	[[nodiscard]] inline Vector2f RotateAndApplyForce(const float& AngleInDegree, const float& Speed) {
+		return { std::sin(toRadianF(AngleInDegree)) * Speed, -(std::cos(toRadianF(AngleInDegree)) * Speed) };
 	}
 
 }

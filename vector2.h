@@ -1,56 +1,38 @@
-#ifndef DEBRY_VECTOR2T_H
-#define DEBRY_VECTOR2T_H
+#ifndef DEBRY_Vector2T_H
+#define DEBRY_Vector2T_H
 
-#include "math.h"
+#include <cmath>
 
 namespace debry {
-	template <class ctype> class Vector2;
-	/* common types */
-	typedef Vector2<float> Vector2f;
-	typedef Vector2<int> Vector2i;
-	typedef Vector2<unsigned int> Vector2ui;
-
-	template <class ctype>
-	class Vector2 {
+	template <typename ctype>
+	struct Vector2T {
 		ctype x;
 		ctype y;
-	public:
-		Vector2(ctype x, ctype y) : x{ x }, y{ y } { }
-		explicit Vector2(ctype s) : Vector2{ s,s } { }
 
-		ctype getX() const { return this->x; }
-		ctype getY() const { return this->y; }
-		Vector2 getVector() const {
-			return { this->x, this->y };
+		Vector2T() : Vector2T{ 0.0, 0.0 } { }
+		Vector2T(ctype x, ctype y) : x{ x }, y{ y } { }
+		explicit Vector2T(ctype s) : Vector2T{ s, s } { }
+
+		Vector2T operator+(const Vector2T& other) const {
+			return Vector2T{ this->x + other.x,this->y + other.y };
 		}
 
-		Vector2* setX(const ctype x) { this->x = x; return this; }
-		Vector2* setY(const ctype y) { this->y = y; return this; }
-		void setVector(const Vector2& other) {
-			this->x = { other.x };
-			this->y = { other.y };
-		}
-
-		Vector2 operator+(const Vector2& other) const {
-			return Vector2{ this->x + other.x,this->y + other.y };
-		}
-
-		void operator+=(const Vector2& other) {
+		void operator+=(const Vector2T& other) {
 			this->x += other.x;
 			this->y += other.y;
 		}
 
-		Vector2 operator-(const Vector2& other) const {
-			return Vector2{ this->x - other.x,this->y - other.y };
+		Vector2T operator-(const Vector2T& other) const {
+			return Vector2T{ this->x - other.x,this->y - other.y };
 		}
 
-		void operator-=(const Vector2& other) {
+		void operator-=(const Vector2T& other) {
 			this->x -= other.x;
 			this->y -= other.y;
 		}
 
-		Vector2 operator*(const ctype& scalar) const {
-			return Vector2{ x * scalar, y * scalar };
+		Vector2T operator*(const ctype& scalar) const {
+			return Vector2T{ x * scalar, y * scalar };
 		}
 
 		void operator*=(const ctype& scalar) {
@@ -58,16 +40,15 @@ namespace debry {
 			this->y *= scalar;
 		}
 
-		void Clear() { x = y = (ctype)0; }
+		void Zero() { x = y = 0.0; }
 		void Negate() { this->x = -x; this->y = -y; }
 
-		/* Euclidean Norm */
-		ctype Magnitude() const {
+		[[nodiscard]] ctype Magnitude() const {
 			return ctype{ (x * x) + (y * y) };
 		}
 
-		ctype MagnitudeSqrt() const {
-			return ctype{ sqrtf(Magnitude()) };
+		[[nodiscard]] ctype MagnitudeSqrt() const {
+			return ctype{ std::sqrt(Magnitude()) };
 		}
 
 		void Normalize() {
@@ -77,12 +58,15 @@ namespace debry {
 				y *= 1.0f / norm;
 			}
 			else {
-				this->Clear();
+				this->Zero();
 			}
 		}
 
 	};
-
+	/* common types */
+	typedef Vector2T<float> Vector2f;
+	typedef Vector2T<int> Vector2i;
+	typedef Vector2T<unsigned int> Vector2ui;
 }
 
 #endif
