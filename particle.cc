@@ -1,9 +1,8 @@
 #include "particle.h"
+#define DEBRY_UPDATE_AVAILABLE_FORCES
+#include "ForceGenerator.h"
 
 using namespace debry;
-
-Particle::Particle() : position{ }, velocity{ }, acceleration{ }, AccumulatedForce{ },
-mass{ 0.0f }, invmass{ 0.0f }, damping{ 0.9f }, ResultingForce{ } { }
 
 void Particle::Integrate(float dt)
 { 
@@ -12,16 +11,18 @@ void Particle::Integrate(float dt)
 		return;
 	}
 
-	AccumulatedForce += acceleration;
-	ResultingForce = AccumulatedForce * invmass;
+	ForceRegistry::UpdateAvailableForces(this);
+
+	faccumulator += acceleration;
+	res_acceleration = faccumulator * mass;
 
 	// Semi-Explicit Euler
-	velocity += ResultingForce * dt;
+	velocity += res_acceleration * dt;
 	position += velocity * dt;
 
 	velocity *= std::pow(damping, dt);
 
-	clearForces();
+	faccumulator.Zero();
 }
 
 Particle* Particle::setMass(const float& weight) {
@@ -29,5 +30,6 @@ Particle* Particle::setMass(const float& weight) {
 	if (mass > 0.0f) {
 		this->invmass = { 1.0f / mass };
 	}
+	else { invmass = 0.0f; }
 	return this;
 }

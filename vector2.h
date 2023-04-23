@@ -40,7 +40,7 @@ namespace debry {
 			this->y *= scalar;
 		}
 
-		void Zero() { x = y = 0.0; }
+		void Zero() { x = y = 0; }
 		void Negate() { this->x = -x; this->y = -y; }
 
 		[[nodiscard]] ctype Magnitude() const {
