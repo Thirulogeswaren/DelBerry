@@ -1,18 +1,36 @@
-#ifndef DEBRY_Vector2T_H
-#define DEBRY_Vector2T_H
+#ifndef DEBRY_VECTOR2T_H
+#define DEBRY_VECTOR2T_H
 
 #include <cmath>
 
 namespace debry {
+
+	template <typename ctype> struct Vector2T;
+	/* common types */
+	using Vector2f = Vector2T<float>;
+	using Vector2i = Vector2T<int>;
+	
 	template <typename ctype>
 	struct Vector2T {
 		ctype x;
 		ctype y;
 
-		Vector2T() : Vector2T{ 0.0, 0.0 } { }
+		Vector2T() : Vector2T{ 0, 0 } { }
 		Vector2T(ctype x, ctype y) : x{ x }, y{ y } { }
 		explicit Vector2T(ctype s) : Vector2T{ s, s } { }
 
+		inline void set(const ctype x, const ctype y) { 
+			this->x = x; this->y = y; 
+		}
+		
+		inline void clear() {
+			this->x = this->y = 0;
+		}
+
+		inline void negate() {
+			this->x = -x; this->y = -y;
+		}
+		
 		Vector2T operator+(const Vector2T& other) const {
 			return Vector2T{ this->x + other.x,this->y + other.y };
 		}
@@ -31,42 +49,44 @@ namespace debry {
 			this->y -= other.y;
 		}
 
-		Vector2T operator*(const ctype& scalar) const {
+		Vector2T operator*(const ctype scalar) const {
 			return Vector2T{ x * scalar, y * scalar };
 		}
 
-		void operator*=(const ctype& scalar) {
+		void operator*=(const ctype scalar) {
 			this->x *= scalar;
 			this->y *= scalar;
 		}
-
-		void Zero() { x = y = 0; }
-		void Negate() { this->x = -x; this->y = -y; }
 
 		[[nodiscard]] ctype Magnitude() const {
 			return ctype{ (x * x) + (y * y) };
 		}
 
 		[[nodiscard]] ctype MagnitudeSqrt() const {
-			return ctype{ std::sqrt(Magnitude()) };
+			return ctype{ std::sqrt((x * x) + (y * y)) };
 		}
 
-		void Normalize() {
+		[[nodiscard]] Vector2T NormalizedVector() const {
+			ctype norm = MagnitudeSqrt();
+			if (norm > 0) {
+				norm = 1 / norm;
+				return Vector2T{ x * norm, y * norm };
+			}
+			return Vector2T{ 0, 0 };
+		}
+
+		void NormalizeIt() {
 			ctype norm = MagnitudeSqrt();
 			if (norm > 0) {
 				x *= 1.0f / norm;
 				y *= 1.0f / norm;
 			}
 			else {
-				this->Zero();
+				this->clear();
 			}
 		}
 
 	};
-	/* common types */
-	typedef Vector2T<float> Vector2f;
-	typedef Vector2T<int> Vector2i;
-	typedef Vector2T<unsigned int> Vector2ui;
 }
 
 #endif

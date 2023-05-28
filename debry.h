@@ -2,7 +2,7 @@
 #define DEBRY_PE_H
 
 #include "debrymath.h"
-#include "particle.h"
+#include "particlebody.h"
 #include "ForceGenerator.h"
 
 #endif 

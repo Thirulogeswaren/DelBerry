@@ -1,29 +1,26 @@
-#define DEBRY_UPDATE_AVAILABLE_FORCES
 #include "ForceGenerator.h"
+#include <vector>
 
 using namespace debry;
 
-#include <map>
-
 namespace {
-	std::map<Particle*, ForceGenerator*> InForces;
+	struct ForceList {
+		ParticleBody* particle;
+		ForceGenerator* generator;
+	};
+	std::vector<ForceList> InForces;
 }
 
-void ForceRegistry::AddForce(Particle& particle, ForceGenerator& fGenerator)
+void ForceRegistry::AddForce(ParticleBody& particle, ForceGenerator& fGenerator)
 {
-	InForces.emplace(&particle, &fGenerator);
-}
-// FIXME: removes all forces acting on particle, if available 
-void ForceRegistry::RemoveForce(Particle& particle, ForceGenerator& fGenerator)
-{
-	InForces.erase(&particle);
+	InForces.push_back(ForceList{&particle, &fGenerator});
 }
 
-void ForceRegistry::UpdateAvailableForces(Particle* this_inst)
+void ParticleBody::UpdateAddedForces(Particle* this_inst)
 {
 	for (const auto& [particle, FGenerator] : InForces) {
-		if (particle == this_inst) {
-			FGenerator->Update(particle);
+		if (particle->getInstance() == this_inst) {
+			FGenerator->Update(particle->getInstance());
 		}
 	}
 }

@@ -17,7 +17,15 @@ namespace debry::math {
 	[[nodiscard]] inline float DotProductF(const Vector2f& w, const Vector2f& v) {
 		return { w.x * v.x + w.y * v.y };
 	}
-	
+
+	[[nodiscard]] inline Vector2f DistanceVectorF(const Vector2f& P1, const Vector2f& P2) {
+		return Vector2f{ P1 - P2 };
+	}
+
+	[[nodiscard]] inline float DistanceF(const Vector2f& P1, const Vector2f& P2) {
+		return Vector2f{ P1 - P2 }.Magnitude();
+	}
+		
 	[[nodiscard]] inline float RotateWrtMousePosition(const Vector2f& MousePosition, const Vector2f& PlayerPosition) {
 		const auto& [x, y] = MousePosition - PlayerPosition;
 		return toDegreeF(std::atan2(y, x));

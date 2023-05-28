@@ -2,7 +2,7 @@
 #define DEBRY_FORCE_GENERATOR_H
 
 #include "debrymath.h"
-#include "particle.h"
+#include "particlebody.h"
 
 namespace debry {
 	class ForceGenerator
@@ -26,17 +26,12 @@ namespace debry {
 		virtual void UpdateForce(Particle* particle) override {
 			if (particle->getMass() <= 0.0f) { return; }
 
-			particle->addForce(gravity);
+			particle->addForce(gravity * particle->getMass());
 		}
 	};
 
 	namespace ForceRegistry {
-		void AddForce(Particle& particle, ForceGenerator& fGenerator);
-		void RemoveForce(Particle& particle, ForceGenerator& fGenerator);
-#ifdef DEBRY_UPDATE_AVAILABLE_FORCES
-		void UpdateAvailableForces(Particle* this_inst);
-#endif 
-
+		void AddForce(ParticleBody& particle, ForceGenerator& fGenerator);
 	}
 }
 
